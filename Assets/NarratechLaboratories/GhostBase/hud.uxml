@@ -2,7 +2,7 @@
     <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; left: 2%; top: 2%; right: 2%; bottom: 2%; position: absolute; -unity-font: url(&quot;project://database/Assets/NarratechLaboratories/GhostBase/Fonts/Doto-VariableFont_ROND,wght.ttf?fileID=12800000&amp;guid=de31e41a1574ccc4385fc095b8879206&amp;type=3#Doto-VariableFont_ROND,wght&quot;); font-size: 20px; -unity-font-style: bold; -unity-font-definition: initial; color: rgb(255, 255, 255); -unity-text-outline-width: 0; text-shadow: 2px 2px 0 rgb(0, 0, 0); letter-spacing: 0; -unity-text-outline-color: rgba(0, 0, 0, 0);">
         <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: center; color: rgb(255, 127, 127); align-self: flex-end;">
             <ui:Label tabindex="-1" text="Gotchas " parse-escape-sequences="true" display-tooltip-when-elided="true" name="GotchasText" />
-            <ui:Label tabindex="-1" text="0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeathsValue" />
+            <ui:Label tabindex="-1" text="0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="GotchasValue" />
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1; flex-direction: row; -unity-font-style: normal; justify-content: center; align-self: flex-end;">
             <ui:Label tabindex="-1" text="Time " parse-escape-sequences="true" display-tooltip-when-elided="true" name="TimeText" />

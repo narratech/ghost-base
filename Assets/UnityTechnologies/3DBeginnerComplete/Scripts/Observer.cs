@@ -38,6 +38,7 @@ public class Observer : MonoBehaviour
                 if (raycastHit.collider.transform == player)
                 {
                     gameEnding.CaughtPlayer ();
+                    m_IsPlayerInRange = false; // Añado esto para que sólo se llame a CaughtPlayer una vez
                 }
             }
         }
