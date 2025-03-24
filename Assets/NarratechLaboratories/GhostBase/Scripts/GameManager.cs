@@ -11,15 +11,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class GameEnding : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
+    // Vamos a tenerlo como Ejemplar Único
+    public static GameManager Instance { get; private set; }
+
     public float fadeDuration = 1f;
     public float displayImageDuration = 1f;
-    public GameObject player;
-    public CanvasGroup exitBackgroundImageCanvasGroup;
-    public AudioSource exitAudio;
-    public CanvasGroup caughtBackgroundImageCanvasGroup;
-    public AudioSource caughtAudio;
+    GameObject player;
+    CanvasGroup exitBackgroundImageCanvasGroup;
+    AudioSource exitAudio;
+    CanvasGroup caughtBackgroundImageCanvasGroup;
+    AudioSource caughtAudio;
 
     bool m_IsPlayerAtExit;
     bool m_IsPlayerCaught;
@@ -35,22 +38,102 @@ public class GameEnding : MonoBehaviour
     private Label gotchasLabel; // Referencia a la etiqueta de UI Toolkit
     private Label winsLabel; // Referencia a la etiqueta de UI Toolkit
 
-    void Start()
+    private void Awake()
     {
-        // Obtener la etiqueta desde el UI Toolkit
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // Evita duplicados
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // Mantiene este mismo objeto entre escenas
+
+        SceneManager.sceneLoaded += OnSceneLoaded; // Se ejecuta cada vez que cambia la escena (la primera vez también)
+    }
+
+    // Se ejecuta entre el Awake y el Start
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Obtener las etiquetas desde el UI Toolkit
         var root = FindObjectOfType<UIDocument>().rootVisualElement;
         timeLabel = root.Q<Label>("TimeValue");
         gotchasLabel = root.Q<Label>("GotchasValue");
         winsLabel = root.Q<Label>("WinsValue");
 
-        // Obtener el waypoint de inicio
+        // Obtener todos los objetos con el tag "Start"
+        GameObject[] startObjects = GameObject.FindGameObjectsWithTag("Start");
+
+        // Verificar si hay al menos un objeto con ese tag
+        if (startObjects.Length > 0)
+        {
+            // Seleccionar un objeto aleatorio de la lista
+            player = startObjects[Random.Range(0, startObjects.Length)];
+        }
+        else
+        {
+            Debug.LogWarning("No se encontraron objetos con el tag 'Start'.");
+        }
+
+        // Obtener el avatar del jugador
+        //player = GameObject.FindWithTag("Player"); // Debería chequear que exista
+
+        // Obtener un waypoint de inicio aleatorio
         start = GameObject.FindWithTag("Start"); // Debería chequear que exista
+
+        GameObject escapeObject = GameObject.FindWithTag("Escape");
+        if (escapeObject != null)
+        {
+            exitAudio = escapeObject.GetComponent<AudioSource>();
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un objeto con la etiqueta 'Escape'.");
+        }
+
+        GameObject caughtObject = GameObject.FindWithTag("Caught");
+        if (caughtObject != null)
+        {
+            caughtAudio = caughtObject.GetComponent<AudioSource>();
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un objeto con la etiqueta 'Caught'.");
+        }
+
+        GameObject exitImageObject = GameObject.FindWithTag("ExitImage");
+        if (exitImageObject != null)
+        {
+            exitBackgroundImageCanvasGroup = exitImageObject.GetComponent<CanvasGroup>();
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un objeto con la etiqueta 'ExitImage'.");
+        }
+
+        GameObject caughtImageObject = GameObject.FindWithTag("CaughtImage");
+        if (caughtImageObject != null)
+        {
+            caughtBackgroundImageCanvasGroup = caughtImageObject.GetComponent<CanvasGroup>();
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un objeto con la etiqueta 'CaughtImage'.");
+        }
+
 
         // Inicializar el texto del cronómetro y los otros textos a cero
         UpdateTimerUI();
         UpdateGotchasUI();
         UpdateWinsUI();
     }
+
+    void Start()
+    {
+
+
+    }
+     
 
     private void UpdateTimerUI()
     {
@@ -65,7 +148,8 @@ public class GameEnding : MonoBehaviour
 
     private void UpdateGotchasUI()
     {
-        gotchasLabel.text = gotchas.ToString();
+        gotchasLabel.text = 
+            gotchas.ToString();
 
     }
 
@@ -80,12 +164,16 @@ public class GameEnding : MonoBehaviour
         if (other.gameObject == player)
         {
             m_IsPlayerAtExit = true;
+            wins++;
+            UpdateWinsUI();
         }
     }
 
     public void CaughtPlayer()
     {
         m_IsPlayerCaught = true;
+        gotchas++;
+        UpdateGotchasUI();
     }
 
     void Update()
@@ -123,25 +211,23 @@ public class GameEnding : MonoBehaviour
             {
                 // Reiniciar significa simplemente sumar 1 a las 'pilladas' y volver a llevar a nuestro avatar al punto de inicio
                 m_IsPlayerCaught = false; // Para que no se repita
-                gotchas++;
-                UpdateGotchasUI();
                 player.transform.position = start.transform.position;
-                // Hago todo lo necesario para que todo vuelta a la normalidad
+                player.transform.rotation = start.transform.rotation;
+                // Hago todo lo necesario para que todo vuelva a la normalidad
                 imageCanvasGroup.alpha = 0.0f;
                 m_Timer = 0.0f;
                 m_HasAudioPlayed = false; 
             }
             else
             {
-                // No reiniciar significa sumar 1 a las 'ganadas' y volver a cargar la escena, con lo que esta podría ser diferente
+                // No reiniciar significa sumar 1 a las 'ganadas' y volver a cargar la escena, con lo que esta podría ser diferente (por ahora sólo cambia el punto de inicio)
                 m_IsPlayerAtExit = false; // Para que no se repita
-                wins++;
-                UpdateWinsUI();
-                SceneManager.LoadScene(0); // No me hará falta esto imageCanvasGroup.alpha = 0.0f; pero ojo, mantener este como un EJEMPLAR ÚNICO PARA QUE NO ME CAMBIE LA UI
+                m_Timer = 0.0f;
+                m_HasAudioPlayed = false;
+                SceneManager.LoadScene(0); // O podía usar "MainScene" que es el nombre de la escena  
                 // En ningún caso haremos Application.Quit ();
                 // ...si acaso un botón para hacer auténtico Reset, de tiempo y todo
             }
         }
     }
 }
-
