@@ -1,7 +1,10 @@
 # Ghost - Base
 Proyecto de videojuego creado en **Unity 2022.3.40f1** utilizando la plantilla **URP 3D** y sobreescribiendo después con el proyecto completo **John Lemon**, uno de los ejemplos de Unity Technologies. Este proyecto está diseñador para servir como punto de partida en algunas prácticas.
 
-Consiste en un entorno virtual 3D que representa una casa encantda, con dos tipos de fantasmas y un personaje (con cara de limón) controlable por el jugador que es John Lemon, quien tendrá que llegar al final esquivando con sigilo a los fantasmas de la casa.
+También está listo para utilizar Visual Scripting e incluye la extensión de pago Behavior Designer 1.7.12, que no se puede subir a este repositorio y sólo aquellos alumnos con permiso de la UCM podrán descargar el ZIP desde [esta carpeta de Google Drivehttps://drive.google.com/drive/folders/1K7ILY8UWtANnjcNmSEQYRh8Io0m23DLw?usp=drive_link|] para volcarlo manualmente a la carpeta Behavior Designer dentro de Assets.
+/[Aa]ssets/[Bb]ehavior [Dd]esigner/*
+
+El proyecto consiste en un entorno virtual 3D que representa una casa encantada, con dos tipos de fantasmas y un personaje (con cara de limón) controlable por el jugador que es John Lemon, quien tendrá que llegar al final esquivando con sigilo a los fantasmas de la casa.
 
 ## Licencia
 Federico Peinado, autor de la documentación, código y recursos de este trabajo, concedo permiso permanente a los alumnos de la Facultad de Informática de la Universidad Complutense de Madrid para utilizar este material, con sus comentarios y evaluaciones, con fines educativos o de investigación; ya sea para obtener datos agregados de forma anónima como para utilizarlo total o parcialmente reconociendo expresamente mi autoría.
@@ -18,3 +21,4 @@ Los recursos de terceros utilizados son de uso público.
   * com.unity.inputsystem@1.5.1 (el nuevo, lo que implica reiniciar todo el editor)
   * com.unity.postprocessing@3.2.2
   * com.unity.render-pipelines.universal@14.0.7
+* Behavior Designer 1.7.12
