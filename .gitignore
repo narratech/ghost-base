@@ -75,3 +75,5 @@ crashlytics-build.properties
 
 # Ignoramos el paquete de pago Behavior Designer, que habrá que descargar desde Drive y sólo con persmiso
 /[Aa]ssets/[Bb]ehavior [Dd]esigner/*
+/[Aa]ssets/[Bb]ehavior [Dd]esigner [Ss]amples/*
+/[Aa]ssets/[Bb]ehavior [Dd]esigner [Tt]utorials/*
