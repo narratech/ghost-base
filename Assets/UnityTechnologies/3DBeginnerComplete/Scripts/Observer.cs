@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Observer : MonoBehaviour
 {
-    public Transform player;
-    public GameManager gameManager;
+    Transform player;
+    GameManager gameManager;
     AudioSource bubbleAudio;
     //public GameObject explosionEffect; // Asigna un prefab de partículas
 
@@ -21,6 +21,16 @@ public class Observer : MonoBehaviour
         else
         {
             Debug.LogWarning("No se encontró un objeto con la etiqueta 'GameManager'.");
+        }
+
+        GameObject playerObject = GameObject.FindWithTag("Player");
+        if (playerObject != null)
+        {
+            player = playerObject.transform;  
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un objeto con la etiqueta 'Player'.");
         }
 
         bubbleAudio = GetComponent<AudioSource>(); // Obtiene el AudioSource

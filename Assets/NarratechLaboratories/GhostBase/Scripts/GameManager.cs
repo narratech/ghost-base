@@ -61,6 +61,11 @@ public class GameManager : MonoBehaviour
         gotchasLabel = root.Q<Label>("GotchasValue");
         winsLabel = root.Q<Label>("WinsValue");
 
+        // DISTIGUIR SI RECARGO TRAS HABER SIDO COGIDO O HABER GANADO. SI HE SIDO COGIDO, TENGO QUE APARECER EN EL START QUE TENÍA ANTES... NO EN UNO NUEVO
+
+
+
+
         // Obtener todos los objetos con el tag "Start"
         GameObject[] startObjects = GameObject.FindGameObjectsWithTag("Start");
 
@@ -68,7 +73,7 @@ public class GameManager : MonoBehaviour
         if (startObjects.Length > 0)
         {
             // Seleccionar un objeto aleatorio de la lista
-            player = startObjects[Random.Range(0, startObjects.Length)];
+            start = startObjects[Random.Range(0, startObjects.Length)];
         }
         else
         {
