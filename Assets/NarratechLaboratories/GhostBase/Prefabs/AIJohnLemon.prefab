@@ -952,9 +952,9 @@ GameObject:
   - component: {fileID: 2701863865896896819}
   - component: {fileID: 7438738072484405706}
   - component: {fileID: 3576288450122217075}
-  - component: {fileID: 142462114116109389}
   - component: {fileID: 355967702596757054}
   - component: {fileID: 685090927300085920}
+  - component: {fileID: 8469017119147052725}
   m_Layer: 0
   m_Name: AIJohnLemon
   m_TagString: Untagged
@@ -1051,108 +1051,6 @@ CapsuleCollider:
   m_Height: 1.4
   m_Direction: 1
   m_Center: {x: 0, y: 0.7, z: 0}
---- !u!114 &142462114116109389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6077229646317852079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56b2cfb9174a093419d0f8db96a60eda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MoveAction:
-    m_Name: Move
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: bef014da-3294-4dbf-b103-34cf83ebf167
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: WASD
-      m_Id: b53efc33-723b-4242-9165-e2704da686d0
-      m_Path: 2DVector
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 4
-    - m_Name: up
-      m_Id: bd122cbb-29b8-43dc-a780-f7ebc5190aa6
-      m_Path: <Keyboard>/w
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: down
-      m_Id: edd59704-01e9-47a8-a82c-1fa7e7839997
-      m_Path: <Keyboard>/s
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: left
-      m_Id: 72e2938d-d8f7-4ac1-82b9-49abd60dc76d
-      m_Path: <Keyboard>/a
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: right
-      m_Id: 0a9e745a-13a3-4eab-80be-646226354a24
-      m_Path: <Keyboard>/d
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: Arrow
-      m_Id: ff128e00-4194-4ee9-a1d4-fea515277682
-      m_Path: 2DVector
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 4
-    - m_Name: up
-      m_Id: 3f5f8e5e-8706-4497-8bce-ba4aacbb8f6b
-      m_Path: <Keyboard>/upArrow
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: down
-      m_Id: 1ddcff81-d136-44bb-9f1c-c3b1dd2d30eb
-      m_Path: <Keyboard>/downArrow
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: left
-      m_Id: af0967b2-c271-4839-b38f-a7e0f2b51f04
-      m_Path: <Keyboard>/leftArrow
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: right
-      m_Id: ac46f28d-9591-4e89-9fd7-757e5eaf0c21
-      m_Path: <Keyboard>/rightArrow
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    m_Flags: 0
-  turnSpeed: 20
 --- !u!82 &355967702596757054
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1257,6 +1155,46 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6077229646317852079}
   m_Enabled: 1
+--- !u!114 &8469017119147052725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6077229646317852079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 0
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 0}
+  mBehaviorSource:
+    behaviorName: JohnLemonBT
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.12
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1 &7028247037451646163
 GameObject:
   m_ObjectHideFlags: 0

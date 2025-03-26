@@ -18,22 +18,20 @@ public class GameManager : MonoBehaviour
 
     public float fadeDuration = 1f;
     public float displayImageDuration = 1f;
-    GameObject player;
-    CanvasGroup exitBackgroundImageCanvasGroup;
-    AudioSource exitAudio;
-    CanvasGroup caughtBackgroundImageCanvasGroup;
-    AudioSource caughtAudio;
-
-    bool m_IsPlayerAtExit;
-    bool m_IsPlayerCaught;
-    float m_Timer = 0.0f;
-    bool m_HasAudioPlayed;
-    GameObject start; // Referencia al waypoint de inicio
-
     public float elapsedTime = 0f; // Tiempo transcurrido
-    public int gotchas = 0; // Pilladas
+    public int gotchas = 0; // Pilladas  
     public int wins = 0; // Ganadas
 
+    private GameObject player;
+    private CanvasGroup exitBackgroundImageCanvasGroup;
+    private AudioSource exitAudio;
+    private CanvasGroup caughtBackgroundImageCanvasGroup;
+    private AudioSource caughtAudio;
+    private bool m_IsPlayerAtExit;
+    private bool m_IsPlayerCaught;
+    private float m_Timer = 0.0f;
+    private bool m_HasAudioPlayed;
+    private GameObject start; // Referencia al waypoint de inicio
     private Label timeLabel; // Referencia a la etiqueta de UI Toolkit
     private Label gotchasLabel; // Referencia a la etiqueta de UI Toolkit
     private Label winsLabel; // Referencia a la etiqueta de UI Toolkit
@@ -49,7 +47,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject); // Mantiene este mismo objeto entre escenas
 
-        SceneManager.sceneLoaded += OnSceneLoaded; // Se ejecuta cada vez que cambia la escena (la primera vez también)
+        SceneManager.sceneLoaded += OnSceneLoaded; // Se ejecuta cada vez que cambia la escena (incluida la primera vez)
     }
 
     // Se ejecuta entre el Awake y el Start
@@ -61,10 +59,7 @@ public class GameManager : MonoBehaviour
         gotchasLabel = root.Q<Label>("GotchasValue");
         winsLabel = root.Q<Label>("WinsValue");
 
-        // DISTIGUIR SI RECARGO TRAS HABER SIDO COGIDO O HABER GANADO. SI HE SIDO COGIDO, TENGO QUE APARECER EN EL START QUE TENÍA ANTES... NO EN UNO NUEVO
-
-
-
+        // Al cargar la escena, ya sea por primera vez o por pasarme el juego, recalculo el Start
 
         // Obtener todos los objetos con el tag "Start"
         GameObject[] startObjects = GameObject.FindGameObjectsWithTag("Start");
@@ -81,15 +76,25 @@ public class GameManager : MonoBehaviour
         }
 
         // Obtener el avatar del jugador
-        //player = GameObject.FindWithTag("Player"); // Debería chequear que exista
-
-        // Obtener un waypoint de inicio aleatorio
-        start = GameObject.FindWithTag("Start"); // Debería chequear que exista
+        player = GameObject.FindWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogWarning("No se encontró un objeto con la etiqueta 'Player'.");
+        }
+        else
+        {
+            player.transform.position = start.transform.position;
+            player.transform.rotation = start.transform.rotation;
+        }
 
         GameObject escapeObject = GameObject.FindWithTag("Escape");
         if (escapeObject != null)
         {
             exitAudio = escapeObject.GetComponent<AudioSource>();
+            if (exitAudio == null)
+            {
+                Debug.LogWarning("No se encontró un componente 'AudioSource' en el objeto 'Escape' correspondiente.");
+            }
         }
         else
         {
@@ -100,6 +105,10 @@ public class GameManager : MonoBehaviour
         if (caughtObject != null)
         {
             caughtAudio = caughtObject.GetComponent<AudioSource>();
+            if (caughtAudio == null)
+            {
+                Debug.LogWarning("No se encontró un componente 'AudioSource' en el objeto 'Caught' correspondiente.");
+            }
         }
         else
         {
@@ -110,6 +119,10 @@ public class GameManager : MonoBehaviour
         if (exitImageObject != null)
         {
             exitBackgroundImageCanvasGroup = exitImageObject.GetComponent<CanvasGroup>();
+            if (exitBackgroundImageCanvasGroup == null)
+            {
+                Debug.LogWarning("No se encontró un componente 'CanvasGroup' en el objeto 'ExitImage' correspondiente.");
+            }
         }
         else
         {
@@ -120,12 +133,15 @@ public class GameManager : MonoBehaviour
         if (caughtImageObject != null)
         {
             caughtBackgroundImageCanvasGroup = caughtImageObject.GetComponent<CanvasGroup>();
+            if (caughtBackgroundImageCanvasGroup == null)
+            {
+                Debug.LogWarning("No se encontró un componente 'CanvasGroup' en el objeto 'CaughtImage' correspondiente.");
+            }
         }
         else
         {
             Debug.LogWarning("No se encontró un objeto con la etiqueta 'CaughtImage'.");
         }
-
 
         // Inicializar el texto del cronómetro y los otros textos a cero
         UpdateTimerUI();
@@ -135,7 +151,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
 
     }
      
@@ -153,8 +168,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdateGotchasUI()
     {
-        gotchasLabel.text = 
-            gotchas.ToString();
+        gotchasLabel.text =  gotchas.ToString();
 
     }
 
@@ -164,6 +178,7 @@ public class GameManager : MonoBehaviour
 
     }
 
+    // El GameManager es a la vez la salida
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == player)
@@ -174,6 +189,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Se llama aquí cuando un punto de vista (Observer) detecta al jugador
     public void CaughtPlayer()
     {
         m_IsPlayerCaught = true;
@@ -186,7 +202,7 @@ public class GameManager : MonoBehaviour
         // Incrementar el tiempo
         elapsedTime += Time.deltaTime;
 
-        // Actualizar la UI
+        // Actualizar el tiempo en la UI
         UpdateTimerUI();
 
         if (m_IsPlayerAtExit)
@@ -214,11 +230,12 @@ public class GameManager : MonoBehaviour
         {
             if (doRestart)
             {
-                // Reiniciar significa simplemente sumar 1 a las 'pilladas' y volver a llevar a nuestro avatar al punto de inicio
+                // Reiniciar significa simplemente sumar 1 a las 'pilladas' y volver a llevar a nuestro avatar al punto de inicio que hubiera en esta partida
                 m_IsPlayerCaught = false; // Para que no se repita
+
                 player.transform.position = start.transform.position;
                 player.transform.rotation = start.transform.rotation;
-                // Hago todo lo necesario para que todo vuelva a la normalidad
+                // Cambio todo lo necesario para volver a la normalidad pero sin reiniciar el nivel
                 imageCanvasGroup.alpha = 0.0f;
                 m_Timer = 0.0f;
                 m_HasAudioPlayed = false; 
@@ -231,7 +248,7 @@ public class GameManager : MonoBehaviour
                 m_HasAudioPlayed = false;
                 SceneManager.LoadScene(0); // O podía usar "MainScene" que es el nombre de la escena  
                 // En ningún caso haremos Application.Quit ();
-                // ...si acaso un botón para hacer auténtico Reset, de tiempo y todo
+                // ...si acaso podemos añadir un botón (la R) para hacer auténtico Reset, de tiempo y todo. y Quit para salir del juego
             }
         }
     }

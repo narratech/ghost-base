@@ -7,7 +7,6 @@ public class Observer : MonoBehaviour
     Transform player;
     GameManager gameManager;
     AudioSource bubbleAudio;
-    //public GameObject explosionEffect; // Asigna un prefab de partículas
 
     bool m_IsPlayerInRange;
 
@@ -16,7 +15,11 @@ public class Observer : MonoBehaviour
         GameObject gameManagerObject = GameObject.FindWithTag("GameManager");
         if (gameManagerObject != null)
         {
-            gameManager = gameManagerObject.GetComponent<GameManager>(); // Debería chequear que exista
+            gameManager = gameManagerObject.GetComponent<GameManager>(); 
+            if (gameManager == null)
+            {
+                Debug.LogWarning("No se encontró un componente 'GameManager' en el objeto 'GameManager' correspondiente.");
+            }
         }
         else
         {
@@ -33,21 +36,32 @@ public class Observer : MonoBehaviour
             Debug.LogWarning("No se encontró un objeto con la etiqueta 'Player'.");
         }
 
-        bubbleAudio = GetComponent<AudioSource>(); // Obtiene el AudioSource
+        GameObject bubbleObject = GameObject.FindWithTag("Bubble");
+        if (bubbleObject != null)
+        {
+            bubbleAudio = bubbleObject.GetComponent<AudioSource>();
+            if (bubbleAudio == null)
+            {
+                Debug.LogWarning("No se encontró un componente 'AudioSource' en el objeto 'Bubble' correspondiente.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un objeto con la etiqueta 'Bubble'.");
+        }
+
     }
 
-        void OnTriggerEnter (Collider other)
-    {
+    void OnTriggerEnter (Collider other)
+    { 
         if (other.transform == player)
         {
             m_IsPlayerInRange = true;
         }
-        else // Si entra algo del mismo color que el padre de este observador, este padre se irá desvaneciendo y se destruirá
+        else // Si entra algo del mismo color que el padre de este observador, este padre desaparecerá con un sonidito 
             if (!other.gameObject.CompareTag("Untagged") && other.gameObject.CompareTag(transform.parent?.gameObject.tag))
             {
-                Debug.Log(other.gameObject.tag);
                 bubbleAudio.Play(); // Reproduce el sonido
-                //Instantiate(explosionEffect, transform.position, Quaternion.identity); // Crea la explosión
                 Destroy(transform.parent?.gameObject); // Destruye el objeto
             }
     }
@@ -72,8 +86,8 @@ public class Observer : MonoBehaviour
             {
                 if (raycastHit.collider.transform == player)
                 {
-                    gameManager.CaughtPlayer ();
-                    m_IsPlayerInRange = false; // Añado esto para que sólo se llame a CaughtPlayer una vez
+                    gameManager.CaughtPlayer();
+                    m_IsPlayerInRange = false; // Añado esto para que sólo se llame a CaughtPlayer el primer fotograma
                 }
             }
         }
