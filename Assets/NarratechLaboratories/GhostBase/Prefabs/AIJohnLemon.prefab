@@ -1174,10 +1174,10 @@ MonoBehaviour:
   logTaskChanges: 0
   group: 0
   resetValuesOnRestart: 0
-  externalBehavior: {fileID: 0}
+  externalBehavior: {fileID: 11400000, guid: 649c250de5ca2e44f93fa16d474b249b, type: 2}
   mBehaviorSource:
     behaviorName: JohnLemonBT
-    behaviorDescription: 
+    behaviorDescription: Falta por hacer el comportamiento del protagonista
     mTaskData:
       types: []
       parentIndex: 
